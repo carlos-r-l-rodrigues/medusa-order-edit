@@ -33,6 +33,16 @@ const Payment = ({ index }: PaymentProps) => {
 
   return (
     <div>
+      {
+        orderEdit.difference_due > 0 &&
+        <div>
+          <h2>Payment</h2>
+          <span>Complete the order edit by providing your payment details</span>
+        </div>
+      }
+
+      <h3>Summary</h3>
+
       Original Payment: {formatAmount({
         amount: orderEdit.total - orderEdit.difference_due,
         region,
@@ -45,13 +55,17 @@ const Payment = ({ index }: PaymentProps) => {
         includeTaxes: false,
       })} <br />
 
-      Amount Due: {formatAmount({
-        amount: orderEdit.difference_due,
+      {orderEdit.difference_due < 0 && <span>Amount to be refunded:</span>}
+      {orderEdit.difference_due > 0 && <span>Amount Due:</span>}
+
+      {formatAmount({
+        amount: orderEdit.difference_due * (orderEdit.difference_due < 0 ? -1 : 1),
         region,
         includeTaxes: false,
-      })} <br />
+      })}
 
-      {(
+
+      {orderEdit.difference_due > 0 && (
         paymentProviders
           .map((provider: PaymentProvider) => {
             const key = index + "_" + provider.id;

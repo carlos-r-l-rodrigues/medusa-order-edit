@@ -4,6 +4,7 @@ import AcceptOrderChanges from "@modules/order-edit/components/accept-changes"
 import DeclineOrderChanges from "@modules/order-edit/components/decline-changes"
 import OrderEditCompleted from "@modules/order-edit/components/order-edit-completed"
 import React from "react"
+import { formatAmount } from "medusa-react"
 
 import Items from "@modules/order-edit/components/items"
 
@@ -31,24 +32,34 @@ const OrderEditForm = () => {
     removedProducts = orderEdit.changes.filter(change => change.type == "item_remove").map(change => change.line_item)
   }
 
+  let buttonText;
+  if (orderEdit.difference_due < 0) {
+    const refundValue = formatAmount({
+      amount: orderEdit.difference_due * -1,
+      region: order.region,
+      includeTaxes: false,
+    })
+    buttonText = `Confirm Refund of ${refundValue}`
+  }
+
   return (
     <div>
       <div className="w-full grid grid-cols-1 gap-y-8">
         <div>
           {
-            orderEdit.payment_collection ?
+            orderEdit.payment_collection &&
             (
               paymentCollectionStatus !== "authorized" && orderEditStatus === "requested" ?
               <Payment index={0} />
               : <OrderEditCompleted />
-            ) :
-            ''
+            )
           }
 
           { // Fallback if accepting order edit fails after payment
-            paymentCollectionStatus === "authorized" && orderEditStatus === "requested" ?
-              <AcceptOrderChanges />
-              : ""
+            (
+              orderEdit.difference_due < 0 ||
+              (paymentCollectionStatus === "authorized" && orderEditStatus === "requested")) &&
+              <AcceptOrderChanges text={buttonText} />
           }
 
           {

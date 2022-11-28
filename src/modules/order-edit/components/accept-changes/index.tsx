@@ -4,7 +4,7 @@ import React, { useState } from "react"
 import Spinner from "@modules/common/icons/spinner"
 import { useOrderEditContext } from "@lib/context/order-edit-context"
 
-const AcceptOrderChanges = () => {
+const AcceptOrderChanges = ({text = "Accept Order Edit"}: {text?: string}) => {
   const {
     orderEdit,
     setOrderEditStatus,
@@ -43,7 +43,7 @@ const AcceptOrderChanges = () => {
   return (
     <div>
       <Button className="min-h-0" onClick={submit} disabled={submitting}>
-        Accept Changes
+        {text}
         {submitting && <Spinner />}
       </Button>
 
