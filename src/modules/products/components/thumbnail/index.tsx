@@ -7,7 +7,7 @@ import React from "react"
 type ThumbnailProps = {
   thumbnail?: string | null
   images?: MedusaImage[] | null
-  size?: "small" | "medium" | "large" | "full"
+  size?: "xxs" | "small" | "medium" | "large" | "full"
 }
 
 const Thumbnail: React.FC<ThumbnailProps> = ({
@@ -20,6 +20,7 @@ const Thumbnail: React.FC<ThumbnailProps> = ({
   return (
     <div
       className={clsx("relative aspect-[29/34]", {
+        "w-[36px]": size === "xxs",
         "w-[180px]": size === "small",
         "w-[290px]": size === "medium",
         "w-[440px]": size === "large",
