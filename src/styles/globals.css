@@ -19,7 +19,7 @@
 
   input:focus ~ label,
   input:not(:placeholder-shown) ~ label {
-    @apply -translate-y-2 text-xsmall-regular; 
+    @apply -translate-y-2 text-xsmall-regular;
   }
 
   input:focus ~ label {
@@ -109,4 +109,33 @@
   .text-3xl-semi {
     @apply text-[36px] leading-[48px] font-semibold;
   }
+}
+
+
+.pay-methods-box {
+  display: block;
+}
+
+.pay-methods-box .pay-method {
+  box-sizing: border-box;
+  width: 166px;
+  height: 72px;
+  float: left;
+  background: #FFFFFF;
+  border: 2px solid #E5E7EB;
+  border-radius: 8px;
+  margin-right: 5px;
+}
+
+.pay-methods-box .pay-method.method-selected {
+  border: 2px solid #7C3AED;
+}
+
+.payment-box {
+  display: block;
+  clear: both;
+}
+
+.round-button{
+  border-radius: 8px;
 }

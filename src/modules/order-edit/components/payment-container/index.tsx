@@ -83,9 +83,9 @@ const PaymentContainer: React.FC<PaymentContainerProps> = ({
 
           return <div
             className={clsx(
-              "flex flex-col gap-y-4 border-b border-gray-200 last:border-b-0",
+              "flex flex-col gap-y-4 border-b border-gray-200 last:border-b-0 pay-method",
               {
-                "bg-gray-50": selected,
+                "method-selected": selected,
               }
             )}
           >
@@ -94,8 +94,8 @@ const PaymentContainer: React.FC<PaymentContainerProps> = ({
               className={"grid grid-cols-[12px_1fr] gap-x-4 py-4 px-8"}
               onClick={setSession(index, key, paymentProvider)}
             >
-              {PaymentInfoMap[paymentProvider.id].icon}
               <div className="flex flex-col text-left">
+                <span>{PaymentInfoMap[paymentProvider.id].icon}</span>
                 <h3 className="text-base-semi leading-none text-gray-900">
                   {PaymentInfoMap[paymentProvider.id].title}
                 </h3>
@@ -106,17 +106,22 @@ const PaymentContainer: React.FC<PaymentContainerProps> = ({
     }
 
     return <div>
+        <div className="pay-methods-box">
         {getPayments()}
+        </div>
 
         {
           selectedProvider.paymentProvider &&
-          <div className="w-full mt-4">
+          <div className="w-full mt-4 payment-box">
             {
             isLoading ? <Spinner /> :
-            <PaymentElement
-              paymentProvider={selectedProvider.paymentProvider}
-              paymentSession={getSession(selectedProvider.paymentProvider.id, selectedProvider.index)}
-            />
+            <>
+              {PaymentInfoMap[selectedProvider.paymentProvider.id].title} selected for payment
+              <PaymentElement
+                paymentProvider={selectedProvider.paymentProvider}
+                paymentSession={getSession(selectedProvider.paymentProvider.id, selectedProvider.index)}
+              />
+            </>
             }
           </div>
         }

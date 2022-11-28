@@ -42,7 +42,7 @@ const AcceptOrderChanges = ({text = "Accept Order Edit"}: {text?: string}) => {
 
   return (
     <div>
-      <Button className="min-h-0" onClick={submit} disabled={submitting}>
+      <Button className="min-h-0 round-button" onClick={submit} disabled={submitting}>
         {text}
         {submitting && <Spinner />}
       </Button>

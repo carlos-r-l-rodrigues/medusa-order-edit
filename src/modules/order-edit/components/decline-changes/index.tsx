@@ -65,7 +65,7 @@ const DeclineOrderChanges = () => {
         autoComplete=""
       />
 
-      <Button className="min-h-0" onClick={submit} disabled={submitting}>
+      <Button className="min-h-0 round-button" onClick={submit} disabled={submitting}>
         Decline Changes
         {submitting && <Spinner />}
       </Button>

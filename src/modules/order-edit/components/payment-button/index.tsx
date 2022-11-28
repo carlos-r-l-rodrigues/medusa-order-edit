@@ -131,6 +131,7 @@ const StripePaymentButton = ({
   return (
     <>
       <Button
+        className="round-button"
         disabled={submitting || disabled || notReady}
         onClick={handlePayment}
       >
@@ -195,6 +196,7 @@ const PayPalPaymentButton = ({
         <span className="text-rose-500 mt-4">{errorMessage}</span>
       )}
       <PayPalButtons
+        className="round-button"
         style={{ layout: "horizontal" }}
         createOrder={async () => paymentSession.data.id as string}
         onApprove={handlePayment}
@@ -226,7 +228,7 @@ const ManualTestPaymentButton = ({
   }
 
   return (
-    <Button disabled={submitting || notReady} onClick={handlePayment}>
+    <Button className="round-button" disabled={submitting || notReady} onClick={handlePayment}>
       {submitting ? <Spinner /> : `Pay ${amount}`}
     </Button>
   )
