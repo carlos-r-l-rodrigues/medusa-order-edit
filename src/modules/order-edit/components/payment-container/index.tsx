@@ -1,6 +1,7 @@
 import Spinner from "@modules/common/icons/spinner"
 import { PaymentSession, PaymentProvider } from "@medusajs/medusa"
-import Radio from "@modules/common/components/radio"
+
+import { useOrderEditContext } from "@lib/context/order-edit-context"
 import clsx from "clsx"
 import React from "react"
 
@@ -10,72 +11,116 @@ import StripeWrapper from "../payment-stripe/wrapper"
 
 import PaymentButton from "../payment-button"
 
+import { CreditCardIcon } from  "../../../layout/components/icons"
+
 type PaymentContainerProps = {
-  paymentSession?: PaymentSession,
-  paymentProvider: PaymentProvider
-  selected?: boolean
-  setSelected: () => void
-  disabled?: boolean
+  index: number
   isLoading?: boolean
 }
 
-const PaymentInfoMap: Record<string, { title: string; description: string }> = {
+const PaymentInfoMap: Record<string, { title: string; icon?: JSX.Element }> = {
   stripe: {
     title: "Credit card",
-    description: "Secure payment with credit card",
+    icon: <CreditCardIcon />,
   },
   paypal: {
     title: "PayPal",
-    description: "Secure payment with PayPal",
+    icon: <CreditCardIcon />,
   },
   manual: {
     title: "Test payment",
-    description: "Test payment using medusa-payment-manual",
+    icon: <CreditCardIcon />,
   },
   "test-pay": {
     title: "Test payment",
-    description: "Test payment using medusa-payment-manual",
+    icon: <CreditCardIcon />,
   },
 }
 
 const PaymentContainer: React.FC<PaymentContainerProps> = ({
-  paymentProvider,
-  paymentSession,
-  selected,
-  setSelected,
+  index = 0,
   isLoading = false,
 }) => {
-  return (
-    <div
-      className={clsx(
-        "flex flex-col gap-y-4 border-b border-gray-200 last:border-b-0",
-        {
-          "bg-gray-50": selected,
-        }
-      )}
-    >
-      <div
-        style={{cursor:"pointer"}}
-        className={"grid grid-cols-[12px_1fr] gap-x-4 py-4 px-8"}
-        onClick={setSelected}
-      >
-        <Radio checked={!!selected} />
-        <div className="flex flex-col text-left">
-          <h3 className="text-base-semi leading-none text-gray-900">
-            {PaymentInfoMap[paymentProvider.id].title}
-          </h3>
-          <span className="text-gray-700 text-small-regular mt-2">
-            {PaymentInfoMap[paymentProvider.id].description}
-          </span>
-          {selected && (
-            <div className="w-full mt-4">
-              {isLoading ? <Spinner /> : <PaymentElement paymentProvider={paymentProvider} paymentSession={paymentSession} />}
+  const { order, orderEdit, managePaymentSessions } = useOrderEditContext()
+
+  const region = order.region
+  const paymentProviders = region.payment_providers
+  const paymentCollection = orderEdit.payment_collection
+  const paymentSessions = paymentCollection?.payment_sessions
+
+
+  const getSession = (providerId: string, index: number) => {
+    if(paymentSessions[index]?.provider_id === providerId) {
+      return paymentSessions[index]
+    }
+    return
+  }
+
+  const setSession = (index: number, key: string, provider: PaymentProvider) => {
+    return () => {
+      managePaymentSessions(index, key, provider.id, getSession(provider.id, index))
+    }
+  }
+
+  let selectedProvider : {
+    paymentProvider?: PaymentProvider
+    index?: number
+  } = { }
+
+  const getPayments = () => {
+    return paymentProviders
+      .map((paymentProvider: PaymentProvider) => {
+          const key = index + "_" + paymentProvider.id;
+
+          const selected = !!getSession(paymentProvider.id, index)
+
+          if(selected) {
+            selectedProvider = {
+              paymentProvider,
+              index,
+            }
+          }
+
+          return <div
+            className={clsx(
+              "flex flex-col gap-y-4 border-b border-gray-200 last:border-b-0",
+              {
+                "bg-gray-50": selected,
+              }
+            )}
+          >
+            <div
+              style={{cursor:"pointer"}}
+              className={"grid grid-cols-[12px_1fr] gap-x-4 py-4 px-8"}
+              onClick={setSession(index, key, paymentProvider)}
+            >
+              {PaymentInfoMap[paymentProvider.id].icon}
+              <div className="flex flex-col text-left">
+                <h3 className="text-base-semi leading-none text-gray-900">
+                  {PaymentInfoMap[paymentProvider.id].title}
+                </h3>
+              </div>
             </div>
-          )}
-        </div>
-      </div>
+          </div>
+        })
+    }
+
+    return <div>
+        {getPayments()}
+
+        {
+          selectedProvider.paymentProvider &&
+          <div className="w-full mt-4">
+            {
+            isLoading ? <Spinner /> :
+            <PaymentElement
+              paymentProvider={selectedProvider.paymentProvider}
+              paymentSession={getSession(selectedProvider.paymentProvider.id, selectedProvider.index)}
+            />
+            }
+          </div>
+        }
     </div>
-  )
 }
 
 const PaymentElement = ({
