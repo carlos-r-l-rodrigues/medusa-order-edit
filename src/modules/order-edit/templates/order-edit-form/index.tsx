@@ -10,6 +10,7 @@ import OrderEditCompleted from "@modules/order-edit/components/order-edit-comple
 
 import Items from "@modules/order-edit/components/items"
 import MedusaCTA from "@modules/layout/components/medusa-cta"
+import ItemsSummary from "@modules/order-edit/components/items-summary"
 
 const OrderEditForm = () => {
   const { orderEdit, order, paymentCollectionStatus, orderEditStatus } =
@@ -58,7 +59,12 @@ const OrderEditForm = () => {
           <h2 className="mt-6 mb-2 text-grey-90 text-sm font-semibold">
             Original Order
           </h2>
-          <Items items={orderEdit?.items ?? []} region={order.region} />
+          <ItemsSummary
+            // TODO: check subtotal if draft order
+            subtotal={order.subtotal}
+            items={orderEdit?.items ?? []}
+            region={order.region}
+          />
 
           <h2 className="text-grey-90 text-sm font-semibold mt-8 mb-2">
             Order edit
