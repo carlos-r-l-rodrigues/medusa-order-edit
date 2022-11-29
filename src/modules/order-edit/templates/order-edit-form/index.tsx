@@ -45,7 +45,7 @@ const OrderEditForm = () => {
       .map((change) => change.line_item)
     removedProducts = orderEdit.changes
       .filter((change) => change.type == "item_remove")
-      .map((change) => change.line_item)
+      .map((change) => change.original_line_item)
   }
 
   let buttonText
@@ -108,19 +108,25 @@ const OrderEditForm = () => {
 
       <div className="w-full grid grid-cols-1 gap-y-8">
         <div>
-          {orderEdit.payment_collection &&
-            (paymentCollectionStatus !== "authorized" &&
-            orderEditStatus === "requested" ? (
-              <Payment index={0} />
-            ) : (
+          {
+            (orderEditStatus === "confirmed" || orderEditStatus === "declined") &&
               <OrderEditCompleted />
-            ))}
+          }
 
           {
-            // Fallback if accepting order edit fails after payment
-            (orderEdit.difference_due < 0 ||
-              (paymentCollectionStatus === "authorized" &&
-                orderEditStatus === "requested")) && (
+            orderEdit.payment_collection &&
+            paymentCollectionStatus !== "authorized" &&
+            orderEditStatus === "requested" &&
+            <Payment index={0} />
+          }
+
+          {
+            // If refund or if accepting order edit fails after payment
+            (orderEditStatus === "requested" && (
+              orderEdit.difference_due < 0 ||
+              paymentCollectionStatus === "authorized"
+              )
+            ) && (
               <AcceptOrderChanges text={buttonText} />
             )
           }
