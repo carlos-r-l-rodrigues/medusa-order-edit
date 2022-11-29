@@ -1,10 +1,6 @@
 import { medusaClient } from "@lib/config"
 
-import {
-  OrderEdit,
-  Order,
-  PaymentSession
-} from "@medusajs/medusa"
+import { OrderEdit, Order, PaymentSession } from "@medusajs/medusa"
 
 import {
   useCompleteOrderEdit,
@@ -12,14 +8,25 @@ import {
   useManagePaymentSessions,
 } from "medusa-react"
 
-import React, { createContext, useContext, useEffect, useMemo, useState } from "react"
+import React, {
+  createContext,
+  useContext,
+  useEffect,
+  useMemo,
+  useState,
+} from "react"
 
 interface OrderEditContext {
   activeSessions: PaymentSession[]
   orderEdit?: OrderEdit
   order: Order
   isLoading: boolean
-  managePaymentSessions: (index: number, key: string, providerId: string, paymentSession?: PaymentSession) => void
+  managePaymentSessions: (
+    index: number,
+    key: string,
+    providerId: string,
+    paymentSession?: PaymentSession
+  ) => void
   onPaymentCompleted: (paymentSession: PaymentSession) => void
   paymentCollectionStatus: string
   orderEditStatus: string
@@ -35,8 +42,10 @@ interface OrderEditProviderProps {
   children?: React.ReactNode
 }
 
-export const OrderEditProvider = ({ orderEdit, children }: OrderEditProviderProps) => {
-
+export const OrderEditProvider = ({
+  orderEdit,
+  children,
+}: OrderEditProviderProps) => {
   const paymentCollectionId = orderEdit?.payment_collection?.id
 
   const {
@@ -44,27 +53,24 @@ export const OrderEditProvider = ({ orderEdit, children }: OrderEditProviderProp
     isLoading: settingPaymentSessions,
   } = useManagePaymentSessions(paymentCollectionId)
 
-  const {
-    mutate: setDeclineOrderEdit,
-    isLoading: settingDecliningOrderEdit,
-  } = useDeclineOrderEdit(orderEdit?.id)
+  const { mutate: setDeclineOrderEdit, isLoading: settingDecliningOrderEdit } =
+    useDeclineOrderEdit(orderEdit?.id)
 
   const {
     mutate: setCompleteOrderEdit,
     isLoading: settingCompletingOrderEdit,
   } = useCompleteOrderEdit(orderEdit?.id)
 
-
   const fillSessions = (paymentSessions) => {
-    if(!paymentSessions) {
+    if (!paymentSessions) {
       return []
     }
 
     const active: PaymentSession[] = []
-    for(let i = 0; i < paymentSessions.length ; i++) {
+    for (let i = 0; i < paymentSessions.length; i++) {
       const key = i + "_" + paymentSessions[i].provider_id
       active[i] = {
-        [key]: paymentSessions[i]
+        [key]: paymentSessions[i],
       }
     }
 
@@ -73,11 +79,12 @@ export const OrderEditProvider = ({ orderEdit, children }: OrderEditProviderProp
 
   const [activeSessions, setActiveSessions]: PaymentSession[] = useState(
     fillSessions(orderEdit?.payment_collection?.payment_sessions)
-  );
+  )
 
-  const [paymentCollectionStatus, setPaymentCollectionStatus] = useState(orderEdit?.payment_collection?.status)
+  const [paymentCollectionStatus, setPaymentCollectionStatus] = useState(
+    orderEdit?.payment_collection?.status
+  )
   const [orderEditStatus, setOrderEditStatus] = useState(orderEdit?.status)
-
 
   /**
    * Boolean that indicates if a part of the orderedit is loading.
@@ -94,13 +101,18 @@ export const OrderEditProvider = ({ orderEdit, children }: OrderEditProviderProp
     settingCompletingOrderEdit,
   ])
 
-  const managePaymentSessions = (index: number, key: string, providerId: string, paymentSession?: PaymentSession) => {
-    const active = {...activeSessions}
-    if(!active[index]) {
+  const managePaymentSessions = (
+    index: number,
+    key: string,
+    providerId: string,
+    paymentSession?: PaymentSession
+  ) => {
+    const active = { ...activeSessions }
+    if (!active[index]) {
       active[index] = {}
     }
 
-    if(active[index][key]) {
+    if (active[index][key]) {
       return
     }
 
@@ -110,19 +122,20 @@ export const OrderEditProvider = ({ orderEdit, children }: OrderEditProviderProp
           provider_id: providerId,
           customer_id: "customer-1",
           amount: orderEdit.payment_collection.amount,
-          session_id: paymentSession?.id
+          session_id: paymentSession?.id,
         },
       },
       {
         onSuccess: ({ payment_collection }) => {
-          orderEdit.payment_collection.payment_sessions = payment_collection.payment_sessions
+          orderEdit.payment_collection.payment_sessions =
+            payment_collection.payment_sessions
 
           active[index] = {
-            [key]: payment_collection.payment_sessions[index]
+            [key]: payment_collection.payment_sessions[index],
           }
 
           setActiveSessions(() => active)
-        }
+        },
       }
     )
   }
@@ -134,19 +147,18 @@ export const OrderEditProvider = ({ orderEdit, children }: OrderEditProviderProp
     // check all completed sessions
     //authorize
     return await medusaClient.paymentCollections
-    .authorize(paymentCollectionId)
-    .then(({payment_collection}) => {
-
-      setCompleteOrderEdit(orderEdit.id, {
-        onSuccess: ({ order_edit }) => {
-          setOrderEditStatus(order_edit.status)
-          setPaymentCollectionStatus(payment_collection.status)
-        },
-        onError: () => {
-          setPaymentCollectionStatus(payment_collection.status)
-        }
+      .authorize(paymentCollectionId)
+      .then(({ payment_collection }) => {
+        setCompleteOrderEdit(orderEdit.id, {
+          onSuccess: ({ order_edit }) => {
+            setOrderEditStatus(order_edit.status)
+            setPaymentCollectionStatus(payment_collection.status)
+          },
+          onError: () => {
+            setPaymentCollectionStatus(payment_collection.status)
+          },
+        })
       })
-    })
   }
 
   return (
@@ -175,7 +187,9 @@ export const useOrderEditContext = () => {
   const context = useContext(OrderEditContext)
 
   if (context === null) {
-    throw new Error("useOrderEditContext must be used within a OrderEditProvider")
+    throw new Error(
+      "useOrderEditContext must be used within a OrderEditProvider"
+    )
   }
   return context
 }

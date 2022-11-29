@@ -22,6 +22,7 @@ const fetchOrderEdit = async (id: string): Promise<any> => {
     "payment_collection.payment_sessions",
     "order",
     "order.region",
+    "order.items",
   ]
 
   return await medusaClient.orderEdits

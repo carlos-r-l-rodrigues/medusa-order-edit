@@ -1,7 +1,8 @@
-import { LineItem, Region } from "@medusajs/medusa"
-import LineItemPrice from "@modules/common/components/line-item-price"
-import Thumbnail from "@modules/products/components/thumbnail"
 import { formatAmount } from "medusa-react"
+
+import { LineItem, Region } from "@medusajs/medusa"
+
+import Thumbnail from "@modules/products/components/thumbnail"
 
 type ItemsSummaryProps = {
   items: LineItem[]
@@ -10,23 +11,22 @@ type ItemsSummaryProps = {
 }
 
 const ItemsSummary = ({ items, region, subtotal }: ItemsSummaryProps) => {
-  if (!items.length) {
-    return null
-  }
-
   let summary = ""
 
-  if (items.length === 1) {
-    const item = items[0]
-    summary = `${item.quantity}x ${item.title}`
-  }
-
-  if (items.length === 2) {
-    summary = `${items[0].quantity}x ${items[0].title} & ${items[1].quantity}x ${items[1].title}`
-  } else {
-    summary = `${items[0].quantity}x ${items[0].title}, ${items[1].quantity}x ${
-      items[1].title
-    } + ${items.length - 2} more`
+  switch (items.length) {
+    case 0:
+      return null
+    case 1:
+      const item = items[0]
+      summary = `${item.quantity}x ${item.title}`
+      break
+    case 2:
+      summary = `${items[0].quantity}x ${items[0].title} & ${items[1].quantity}x ${items[1].title}`
+      break
+    default:
+      summary = `${items[0].quantity}x ${items[0].title}, ${
+        items[1].quantity
+      }x ${items[1].title} + ${items.length - 2} more`
   }
 
   return (
