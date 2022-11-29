@@ -48,7 +48,7 @@ const OrderEditForm = () => {
       .map((change) => change.line_item)
   }
 
-  let buttonText;
+  let buttonText
   if (orderEdit.difference_due < 0) {
     const refundValue = formatAmount({
       amount: orderEdit.difference_due * -1,
@@ -106,9 +106,34 @@ const OrderEditForm = () => {
         </div>
       </div>
 
+      <div className="w-full grid grid-cols-1 gap-y-8">
+        <div>
+          {orderEdit.payment_collection &&
+            (paymentCollectionStatus !== "authorized" &&
+            orderEditStatus === "requested" ? (
+              <Payment index={0} />
+            ) : (
+              <OrderEditCompleted />
+            ))}
 
-        <MedusaCTA />
+          {
+            // Fallback if accepting order edit fails after payment
+            (orderEdit.difference_due < 0 ||
+              (paymentCollectionStatus === "authorized" &&
+                orderEditStatus === "requested")) && (
+              <AcceptOrderChanges text={buttonText} />
+            )
+          }
 
+          {orderEditStatus === "requested" &&
+          paymentCollectionStatus !== "authorized" ? (
+            <DeclineOrderChanges />
+          ) : (
+            ""
+          )}
+          <MedusaCTA />
+        </div>
+      </div>
     </>
   )
 }
