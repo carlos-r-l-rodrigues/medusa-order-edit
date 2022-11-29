@@ -17,13 +17,13 @@ const OrderEditCompleted = () => {
           <h2>Payment Successful</h2>
           <strong>{
             formatAmount({
-              amount: orderEdit.payment_collection.authorized_amount,
+              amount: orderEdit?.difference_due || orderEdit?.payment_collection?.authorized_amount,
               region: order.region,
               includeTaxes: false,
             })
           }</strong>
 
-          <span>The payment will appear on your statement as “Tekla Fabrics order edit”.</span>
+          <span>The payment will appear on your statement as "Branded Store order edit”.</span>
         </div>
       }
 
