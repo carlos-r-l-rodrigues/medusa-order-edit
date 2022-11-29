@@ -53,4 +53,19 @@ const ImageOrPlaceholder = ({
   )
 }
 
+export const Thumbnails = ({ thumbnails }: { thumbnails: string[] }) => {
+  return (
+    <div className="relative w-[40px] h-[40px]">
+      {thumbnails.slice(0, 3).map((t, i) => (
+        <div
+          className="absolute aspect-[30/40] w-[32px] rounded-lg overflow-hidden border-2 border-white"
+          style={{ left: i * 8 }}
+        >
+          <ImageOrPlaceholder image={t} size="xxs" />
+        </div>
+      ))}
+    </div>
+  )
+}
+
 export default Thumbnail

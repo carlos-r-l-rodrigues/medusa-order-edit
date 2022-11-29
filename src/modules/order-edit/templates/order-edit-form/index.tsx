@@ -62,7 +62,7 @@ const OrderEditForm = () => {
           <ItemsSummary
             // TODO: check subtotal if draft order
             subtotal={order.subtotal}
-            items={order?.items ?? []}
+            items={orderEdit?.items ?? []}
             region={order.region}
           />
 

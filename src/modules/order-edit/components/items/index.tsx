@@ -18,7 +18,7 @@ const Items = ({ items, region }: ItemsProps) => {
         return (
           <div className="flex justify-between gap-x-2" key={item.id}>
             <div className="flex gap-x-4 flex-auto">
-              <div className="rounded overflow-hidden">
+              <div className="rounded-lg overflow-hidden">
                 <Thumbnail thumbnail={item.thumbnail} size="xxs" />
               </div>
 

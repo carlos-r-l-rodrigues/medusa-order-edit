@@ -2,7 +2,7 @@ import { formatAmount } from "medusa-react"
 
 import { LineItem, Region } from "@medusajs/medusa"
 
-import Thumbnail from "@modules/products/components/thumbnail"
+import Thumbnail, { Thumbnails } from "@modules/products/components/thumbnail"
 
 type ItemsSummaryProps = {
   items: LineItem[]
@@ -33,8 +33,11 @@ const ItemsSummary = ({ items, region, subtotal }: ItemsSummaryProps) => {
     <div className="py-2 gap-y-4 flex flex-col">
       <div className="flex justify-between gap-x-2">
         <div className="flex items-center gap-x-4 flex-auto">
-          <div className="rounded overflow-hidden">
-            <Thumbnail thumbnail={items[0].thumbnail} size="xxs" />
+          <div className="rounded overflow-hidden relative">
+            <Thumbnails
+              thumbnails={items.map((item) => item.thumbnail)}
+              size="xxs"
+            />
           </div>
 
           <h3
