@@ -5,13 +5,16 @@ import { useOrderEditContext } from "@lib/context/order-edit-context"
 import clsx from "clsx"
 import React from "react"
 
+import * as DropdownMenu from "@radix-ui/react-dropdown-menu"
+
 import PaymentStripe from "../payment-stripe"
 import PaymentTest from "../payment-test"
 import StripeWrapper from "../payment-stripe/wrapper"
 
 import PaymentButton from "../payment-button"
 
-import { CreditCardIcon } from  "../../../layout/components/icons"
+import { CreditCardIcon } from "../../../layout/components/icons"
+import ChevronDown from "@modules/common/icons/chevron-down"
 
 type PaymentContainerProps = {
   index: number
@@ -48,92 +51,109 @@ const PaymentContainer: React.FC<PaymentContainerProps> = ({
   const paymentCollection = orderEdit.payment_collection
   const paymentSessions = paymentCollection?.payment_sessions
 
+  const [provider, setProvider] = React.useState(paymentProviders[0])
 
   const getSession = (providerId: string, index: number) => {
-    if(paymentSessions[index]?.provider_id === providerId) {
+    if (paymentSessions[index]?.provider_id === providerId) {
       return paymentSessions[index]
     }
     return
   }
 
-  const setSession = (index: number, key: string, provider: PaymentProvider) => {
+  const setSession = (
+    index: number,
+    key: string,
+    provider: PaymentProvider
+  ) => {
     return () => {
-      managePaymentSessions(index, key, provider.id, getSession(provider.id, index))
+      managePaymentSessions(
+        index,
+        key,
+        provider.id,
+        getSession(provider.id, index)
+      )
     }
   }
 
-  let selectedProvider : {
+  let selectedProvider: {
     paymentProvider?: PaymentProvider
     index?: number
-  } = { }
+  } = {}
 
   const getPayments = () => {
-    return paymentProviders
-      .map((paymentProvider: PaymentProvider) => {
-          const key = index + "_" + paymentProvider.id;
+    return paymentProviders.map((paymentProvider: PaymentProvider) => {
+      const key = index + "_" + paymentProvider.id
 
-          const selected = !!getSession(paymentProvider.id, index)
+      const selected = !!getSession(paymentProvider.id, index)
 
-          if(selected) {
-            selectedProvider = {
-              paymentProvider,
-              index,
+      if (selected) {
+        selectedProvider = {
+          paymentProvider,
+          index,
+        }
+      }
+
+      return (
+        <div
+          className={clsx(
+            "flex flex-col gap-y-4 border-b border-gray-200 last:border-b-0 pay-method",
+            {
+              "method-selected": selected,
             }
-          }
-
-          return <div
-            className={clsx(
-              "flex flex-col gap-y-4 border-b border-gray-200 last:border-b-0 pay-method",
-              {
-                "method-selected": selected,
-              }
-            )}
+          )}
+        >
+          <div
+            style={{ cursor: "pointer" }}
+            className={"grid grid-cols-[12px_1fr] gap-x-4 py-4 px-8"}
+            onClick={setSession(index, key, paymentProvider)}
           >
-            <div
-              style={{cursor:"pointer"}}
-              className={"grid grid-cols-[12px_1fr] gap-x-4 py-4 px-8"}
-              onClick={setSession(index, key, paymentProvider)}
-            >
-              <div className="flex flex-col text-left">
-                <span>{PaymentInfoMap[paymentProvider.id].icon}</span>
-                <h3 className="text-base-semi leading-none text-gray-900">
-                  {PaymentInfoMap[paymentProvider.id].title}
-                </h3>
-              </div>
+            <div className="flex flex-col text-left">
+              <span>{PaymentInfoMap[paymentProvider.id].icon}</span>
+              <h3 className="text-base-semi leading-none text-gray-900">
+                {PaymentInfoMap[paymentProvider.id].title}
+              </h3>
             </div>
           </div>
-        })
-    }
-
-    return <div>
-        <div className="pay-methods-box">
-        {getPayments()}
         </div>
+      )
+    })
+  }
 
-        {
-          selectedProvider.paymentProvider &&
-          <div className="w-full mt-4 payment-box">
-            {
-            isLoading ? <Spinner /> :
+  return (
+    <div>
+      <div className="pay-methods-box">{getPayments()}</div>
+
+      {selectedProvider.paymentProvider && (
+        <div className="w-full mt-4">
+          {isLoading ? (
+            <Spinner />
+          ) : (
             <>
-              {PaymentInfoMap[selectedProvider.paymentProvider.id].title} selected for payment
+              {PaymentInfoMap[selectedProvider.paymentProvider.id].title}{" "}
+              selected for payment
               <PaymentElement
                 paymentProvider={selectedProvider.paymentProvider}
-                paymentSession={getSession(selectedProvider.paymentProvider.id, selectedProvider.index)}
+                paymentSession={getSession(
+                  selectedProvider.paymentProvider.id,
+                  selectedProvider.index
+                )}
               />
             </>
-            }
-          </div>
-        }
+          )}
+        </div>
+      )}
+
+      <ProviderDropDown activeProvider="stripe" setProvider={setProvider} />
     </div>
+  )
 }
 
 const PaymentElement = ({
   paymentProvider,
   paymentSession,
 }: {
-  paymentProvider: PaymentProvider,
-  paymentSession: PaymentSession,
+  paymentProvider: PaymentProvider
+  paymentSession: PaymentSession
 }) => {
   switch (paymentProvider.id) {
     case "stripe":
@@ -154,10 +174,12 @@ const PaymentElement = ({
         </div>
       )
     case "test-pay":
-      <div className="pt-8 pr-7">
+      return (
+        <div className="pt-8 pr-7">
           <PaymentTest />
           <PaymentButton paymentSession={paymentSession} />
         </div>
+      )
     case "paypal":
       return (
         <div className="pt-8 pr-7">
@@ -169,5 +191,48 @@ const PaymentElement = ({
   }
 }
 
+const ProviderDropDown = ({ activeProvider, setProvider }) => {
+  return (
+    <DropdownMenu.Root>
+      <DropdownMenu.Trigger
+        className="w-[56px] h-[72px] flex justify-center align-center bg-white shadow-md p-4 cursor-pointer"
+        asChild
+      >
+        <button>
+          <ChevronDown size="100%" />
+        </button>
+      </DropdownMenu.Trigger>
+
+      <DropdownMenu.Portal>
+        <DropdownMenu.Content
+          className="bg-white p-4 w-[240px] rounded shadow-md"
+          sideOffset={5}
+        >
+          <DropdownMenu.RadioGroup
+            value={activeProvider}
+            onValueChange={setProvider}
+          >
+            <DropdownMenu.RadioItem
+              className="text-grey-90 text-small py-2 cursor-pointer"
+              value="stripe"
+            >
+              Apple
+            </DropdownMenu.RadioItem>
+
+            <DropdownMenu.Separator />
+            <DropdownMenu.RadioItem
+              className="text-grey-90 text-small py-2 cursor-pointer"
+              value="stripe"
+            >
+              Stripe
+            </DropdownMenu.RadioItem>
+          </DropdownMenu.RadioGroup>
+
+          <DropdownMenu.Arrow className="DropdownMenuArrow" />
+        </DropdownMenu.Content>
+      </DropdownMenu.Portal>
+    </DropdownMenu.Root>
+  )
+}
 
 export default PaymentContainer

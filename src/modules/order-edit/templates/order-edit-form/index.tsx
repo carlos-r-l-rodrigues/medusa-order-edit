@@ -106,34 +106,33 @@ const OrderEditForm = () => {
         </div>
       </div>
 
-      <div className="w-full content-container flex justify-center py-8">
-        <div className="w-[480px]">
-          {orderEdit.payment_collection &&
-            (paymentCollectionStatus !== "authorized" &&
-            orderEditStatus === "requested" ? (
-              <Payment index={0} />
-            ) : (
-              <OrderEditCompleted />
-            ))}
+      <div className="w-full bg-gray-100 content-container py-8 mb-2">
+        <div className="flex h-full justify-center ">
+          <div>
+            {orderEdit.payment_collection &&
+              (paymentCollectionStatus !== "authorized" &&
+              orderEditStatus === "requested" ? (
+                <Payment index={0} />
+              ) : (
+                <OrderEditCompleted />
+              ))}
 
-          {
-            // Fallback if accepting order edit fails after payment
-            (orderEdit.difference_due < 0 ||
-              (paymentCollectionStatus === "authorized" &&
-                orderEditStatus === "requested")) && (
-              <AcceptOrderChanges text={buttonText} />
-            )
-          }
+            {
+              // Fallback if accepting order edit fails after payment
+              (orderEdit.difference_due < 0 ||
+                (paymentCollectionStatus === "authorized" &&
+                  orderEditStatus === "requested")) && (
+                <AcceptOrderChanges text={buttonText} />
+              )
+            }
 
-          {orderEditStatus === "requested" &&
-          paymentCollectionStatus !== "authorized" ? (
-            <DeclineOrderChanges />
-          ) : (
-            ""
-          )}
-
-          <MedusaCTA />
+            {!!(
+              orderEditStatus === "requested" &&
+              paymentCollectionStatus !== "authorized"
+            ) && <DeclineOrderChanges />}
+          </div>
         </div>
+        <MedusaCTA />
       </div>
     </>
   )
