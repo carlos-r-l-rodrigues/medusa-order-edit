@@ -10,7 +10,6 @@ import { ReactElement } from "react"
 import { dehydrate, QueryClient, useQuery } from "react-query"
 import { NextPageWithLayout, PrefetchedPageProps } from "types/global"
 
-
 const fetchOrderEdit = async (id: string): Promise<any> => {
   const expand = [
     "changes",
@@ -23,24 +22,29 @@ const fetchOrderEdit = async (id: string): Promise<any> => {
     "payment_collection.payment_sessions",
     "order",
     "order.region",
+    "order.items",
   ]
 
   return await medusaClient.orderEdits
     .retrieve(id + "?expand=" + expand.join(","))
-    .then(async ({order_edit}) => {
+    .then(async ({ order_edit }) => {
       return order_edit
     })
 }
 
-const OrderEditPage: NextPageWithLayout<PrefetchedPageProps> = ({ notFound }) => {
+const OrderEditPage: NextPageWithLayout<PrefetchedPageProps> = ({
+  notFound,
+}) => {
   const { query, isFallback, replace } = useRouter()
 
   const id = query.id + ""
 
-  const { data: orderEdit, isError, isSuccess, isLoading } = useQuery(
-    ["get_order_edit", id],
-    () => fetchOrderEdit(id)
-  )
+  const {
+    data: orderEdit,
+    isError,
+    isSuccess,
+    isLoading,
+  } = useQuery(["get_order_edit", id], () => fetchOrderEdit(id))
 
   if (notFound) {
     if (IS_BROWSER) {
@@ -66,7 +70,11 @@ const OrderEditPage: NextPageWithLayout<PrefetchedPageProps> = ({ notFound }) =>
 }
 
 OrderEditPage.getLayout = (page: ReactElement) => {
-  return <Layout>{page}</Layout>
+  return (
+    <Layout hideHeader hideFooter>
+      {page}
+    </Layout>
+  )
 }
 
 export const getStaticPaths: GetStaticPaths = async () => {
@@ -75,7 +83,6 @@ export const getStaticPaths: GetStaticPaths = async () => {
     fallback: "blocking",
   }
 }
-
 
 export const getStaticProps: GetStaticProps = async (context) => {
   const queryClient = new QueryClient()

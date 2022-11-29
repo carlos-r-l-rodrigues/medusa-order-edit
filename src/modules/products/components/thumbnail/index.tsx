@@ -7,7 +7,7 @@ import React from "react"
 type ThumbnailProps = {
   thumbnail?: string | null
   images?: MedusaImage[] | null
-  size?: "small" | "medium" | "large" | "full"
+  size?: "xxs" | "small" | "medium" | "large" | "full"
 }
 
 const Thumbnail: React.FC<ThumbnailProps> = ({
@@ -20,6 +20,7 @@ const Thumbnail: React.FC<ThumbnailProps> = ({
   return (
     <div
       className={clsx("relative aspect-[29/34]", {
+        "w-[36px]": size === "xxs",
         "w-[180px]": size === "small",
         "w-[290px]": size === "medium",
         "w-[440px]": size === "large",
@@ -48,6 +49,21 @@ const ImageOrPlaceholder = ({
   ) : (
     <div className="w-full h-full absolute inset-0 bg-gray-100 flex items-center justify-center">
       <PlaceholderImage size={size === "small" ? 16 : 24} />
+    </div>
+  )
+}
+
+export const Thumbnails = ({ thumbnails }: { thumbnails: string[] }) => {
+  return (
+    <div className="relative w-[40px] h-[40px]">
+      {thumbnails.slice(0, 3).map((t, i) => (
+        <div
+          className="absolute aspect-[30/40] w-[32px] rounded-lg overflow-hidden border-2 border-white"
+          style={{ left: i * 8 }}
+        >
+          <ImageOrPlaceholder image={t} size="xxs" />
+        </div>
+      ))}
     </div>
   )
 }

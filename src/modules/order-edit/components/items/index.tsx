@@ -11,36 +11,37 @@ const Items = ({ items, region }: ItemsProps) => {
   if (!items.length) {
     return <></>
   }
+
   return (
-    <div className="p-10 border-b border-gray-200 gap-y-4 flex flex-col">
+    <div className="py-2 gap-y-4 flex flex-col">
       {items.map((item) => {
-            return (
-              <div className="grid grid-cols-[122px_1fr] gap-x-4" key={item.id}>
-                <div className="w-[122px]">
-                  <Thumbnail thumbnail={item.thumbnail} size="full" />
-                </div>
-                <div className="flex flex-col justify-between flex-1">
-                  <div className="flex flex-col flex-1 text-small-regular">
-                    <div className="flex items-start justify-between">
-                      <div>
-                        <h3 className="text-base-regular overflow-ellipsis overflow-hidden whitespace-nowrap mr-4">
-                            <a>{item.quantity}x {item.title}</a>
-                        </h3>
-                      </div>
-                      <div className="flex justify-end">
-                        <LineItemPrice
-                          quantity={item.quantity}
-                          region={region}
-                          item={item}
-                        />
-                      </div>
-                    </div>
-                  </div>
-                </div>
+        return (
+          <div className="flex justify-between gap-x-2" key={item.id}>
+            <div className="flex gap-x-4 flex-auto">
+              <div className="rounded-lg overflow-hidden">
+                <Thumbnail thumbnail={item.thumbnail} size="xxs" />
               </div>
-            )
-          })
-        }
+
+              <div>
+                <h3 className="overflow-ellipsis overflow-hidden whitespace-nowrap font-medium text-base text-grey-90">
+                  {item.title}
+                </h3>
+              </div>
+            </div>
+
+            <div className="text-grey-50 text-base-regular flex-none">
+              {item.quantity}x
+            </div>
+            <div className="text-grey-90 font-medium flex-none w-32">
+              <LineItemPrice
+                quantity={item.quantity}
+                region={region}
+                item={item}
+              />
+            </div>
+          </div>
+        )
+      })}
     </div>
   )
 }
