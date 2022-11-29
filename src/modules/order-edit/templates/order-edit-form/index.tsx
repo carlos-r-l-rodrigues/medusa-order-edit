@@ -12,6 +12,17 @@ import Items from "@modules/order-edit/components/items"
 import MedusaCTA from "@modules/layout/components/medusa-cta"
 import ItemsSummary from "@modules/order-edit/components/items-summary"
 
+const SectionDivider = () => {
+  return (
+    <div className="relative h-[20px] flex justify-center items-center my-5">
+      <div className="border-b absolute top-[11px] w-[100%]" />
+      <div className="text-grey-40 font-xl p-4 bg-white w-[32px] h-[32px] z-50 flex justify-center items-center">
+        +
+      </div>
+    </div>
+  )
+}
+
 const OrderEditForm = () => {
   const { orderEdit, order, paymentCollectionStatus, orderEditStatus } =
     useOrderEditContext()
@@ -55,7 +66,6 @@ const OrderEditForm = () => {
           <p className="text-grey-40 text-sm">
             Overview of the changes made in the order edit
           </p>
-
           <h2 className="mt-6 mb-2 text-grey-90 text-sm font-semibold">
             Original Order
           </h2>
@@ -66,17 +76,17 @@ const OrderEditForm = () => {
             region={order.region}
           />
 
-          <h2 className="text-grey-90 text-sm font-semibold mt-8 mb-2">
+          <SectionDivider />
+
+          <h2 className="text-grey-90 text-sm font-semibold mb-2">
             Order edit
           </h2>
-
           {addedProducts.length ? (
             <h4 className="text-small font-semibold text-grey-50">Added</h4>
           ) : (
             ""
           )}
           <Items items={addedProducts} region={order.region} />
-
           {updatedProducts.length ? (
             <h4 className="text-small font-semibold text-grey-50 mt-6">
               Updated
@@ -85,7 +95,6 @@ const OrderEditForm = () => {
             ""
           )}
           <Items items={updatedProducts} region={order.region} />
-
           {removedProducts.length ? (
             <h4 className="text-small font-semibold text-grey-50 mt-6">
               Removed
