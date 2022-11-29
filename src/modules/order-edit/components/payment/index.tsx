@@ -8,56 +8,67 @@ interface PaymentProps {
 }
 
 const Payment = ({ index }: PaymentProps) => {
-
   const { order, orderEdit, isLoading } = useOrderEditContext()
 
   const region = order.region
 
   return (
-    <div>
-      {
-        orderEdit.difference_due > 0 &&
+    <div className="w-[480px]">
+      {orderEdit.difference_due > 0 && (
         <div>
-          <h2 className="text-xl-semi">Payment</h2>
-          <span>Complete the order edit by providing your payment details</span>
+          <h1 className="text-xl-semi text-grey-90">Payment</h1>
+          <p className="text-grey-40 text-sm">
+            Complete the order edit by providing your payment details
+          </p>
         </div>
-      }
+      )}
 
-      <h3 className="text-large-semi">Summary</h3>
+      <h2 className="mt-6 mb-2 text-grey-90 text-sm font-semibold">Summary</h2>
 
-      <div>
-      Original Payment: {formatAmount({
-        amount: orderEdit.total - orderEdit.difference_due,
-        region,
-        includeTaxes: false,
-      })}
+      <div className="mb-2 text-grey-40 text-sm flex justify-between">
+        Original Payment:{" "}
+        <span className="text-grey-90">
+          {formatAmount({
+            amount: orderEdit.total - orderEdit.difference_due,
+            region,
+            includeTaxes: false,
+          })}{" "}
+        </span>
       </div>
 
-      <div>
-      New Total: {formatAmount({
-        amount: orderEdit.total,
-        region,
-        includeTaxes: false,
-      })}
+      <div className="mb-2 text-grey-40 text-sm flex justify-between">
+        New Total:{" "}
+        <span className="text-grey-90">
+          {formatAmount({
+            amount: orderEdit.total,
+            region,
+            includeTaxes: false,
+          })}
+        </span>
       </div>
 
-      <div>
-      {orderEdit.difference_due < 0 && <span>Amount to be refunded:</span>}
-      {orderEdit.difference_due > 0 && <span>Amount Due:</span>}
+      <div className="mb-2 text-grey-40 text-sm flex justify-between">
+        {orderEdit.difference_due < 0 && <span>Amount to be refunded:</span>}
+        {orderEdit.difference_due > 0 && <span>Amount Due:</span>}
+        <span className="text-grey-90">
+          {formatAmount({
+            amount:
+              orderEdit.difference_due *
+              (orderEdit.difference_due < 0 ? -1 : 1),
+            region,
+            includeTaxes: false,
+          })}
+        </span>
       </div>
 
-      {formatAmount({
-        amount: orderEdit.difference_due * (orderEdit.difference_due < 0 ? -1 : 1),
-        region,
-        includeTaxes: false,
-      })}
-
-      {orderEdit.difference_due > 0 &&
-          <>
-            <h3 className="text-large-semi">Payment Method</h3>
-            <PaymentContainer index={index} isLoading={isLoading} />
-          </>
-      }
+      {orderEdit.difference_due > 0 && (
+        <>
+          <h2 className="mt-6 mb-2 text-grey-90 text-sm font-semibold">
+            Summary
+          </h2>
+          <PaymentContainer index={index} isLoading={isLoading} />
+        </>
+      )}
     </div>
   )
 }

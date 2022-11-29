@@ -106,8 +106,8 @@ const OrderEditForm = () => {
         </div>
       </div>
 
-      <div className="w-full grid grid-cols-1 gap-y-8">
-        <div>
+      <div className="w-full content-container flex justify-center py-8">
+        <div className="w-[480px]">
           {orderEdit.payment_collection &&
             (paymentCollectionStatus !== "authorized" &&
             orderEditStatus === "requested" ? (
@@ -131,6 +131,7 @@ const OrderEditForm = () => {
           ) : (
             ""
           )}
+
           <MedusaCTA />
         </div>
       </div>
