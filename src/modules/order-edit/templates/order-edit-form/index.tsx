@@ -60,7 +60,7 @@ const OrderEditForm = () => {
 
   return (
     <>
-      <div className="w-full bg-white content-container flex justify-center py-8">
+      <div className="w-full bg-white content-container flex justify-center pt-16 pb-8">
         <div className="w-[480px]">
           <h1 className="text-xl-semi text-grey-90">Order edit detals</h1>
           <p className="text-grey-40 text-sm">
@@ -106,7 +106,7 @@ const OrderEditForm = () => {
         </div>
       </div>
 
-      <div className="w-full bg-gray-100 content-container py-8 mb-2">
+      <div className="w-full bg-gray-100 content-container pt-16 pb-8 mb-2">
         <div className="flex h-full justify-center ">
           <div>
             {orderEdit.payment_collection &&

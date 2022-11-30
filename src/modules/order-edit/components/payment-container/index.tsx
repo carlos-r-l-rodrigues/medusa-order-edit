@@ -96,7 +96,7 @@ const PaymentContainer: React.FC<PaymentContainerProps> = ({
       return (
         <div
           className={clsx(
-            "flex flex-col gap-y-4 border-b border-gray-200 last:border-b-0 pay-method",
+            "flex flex-grow flex-col gap-y-4 border border-gray-200 last:border-b-0 min-w-[166px] min-h-[72px] rounded bg-white shadow-sm",
             {
               "method-selected": selected,
             }
@@ -104,12 +104,12 @@ const PaymentContainer: React.FC<PaymentContainerProps> = ({
         >
           <div
             style={{ cursor: "pointer" }}
-            className={"grid grid-cols-[12px_1fr] gap-x-4 py-4 px-8"}
+            className={"h-[100%] py-4 px-8"}
             onClick={setSession(index, key, paymentProvider)}
           >
-            <div className="flex flex-col text-left">
+            <div className="h-[100%] flex flex-col justify-between">
               <span>{PaymentInfoMap[paymentProvider.id].icon}</span>
-              <h3 className="text-base-semi leading-none text-gray-900">
+              <h3 className="text-base-semi whitespace-nowrap leading-none text-gray-900">
                 {PaymentInfoMap[paymentProvider.id].title}
               </h3>
             </div>
@@ -120,8 +120,8 @@ const PaymentContainer: React.FC<PaymentContainerProps> = ({
   }
 
   return (
-    <div>
-      <div className="pay-methods-box">{getPayments()}</div>
+    <div className="flex gap-1">
+      {getPayments()}
 
       {selectedProvider.paymentProvider && (
         <div className="w-full mt-4">
@@ -143,7 +143,9 @@ const PaymentContainer: React.FC<PaymentContainerProps> = ({
         </div>
       )}
 
-      <ProviderDropDown activeProvider="stripe" setProvider={setProvider} />
+      <div className="flex-shrink">
+        <ProviderDropdown activeProvider="stripe" setProvider={setProvider} />
+      </div>
     </div>
   )
 }
@@ -191,11 +193,11 @@ const PaymentElement = ({
   }
 }
 
-const ProviderDropDown = ({ activeProvider, setProvider }) => {
+const ProviderDropdown = ({ activeProvider, setProvider }) => {
   return (
     <DropdownMenu.Root>
       <DropdownMenu.Trigger
-        className="w-[56px] h-[72px] flex justify-center align-center bg-white shadow-md p-4 cursor-pointer"
+        className="w-[56px] h-[76px] border border-gray-200 flex justify-center align-center rounded bg-white shadow-sm p-4 cursor-pointer"
         asChild
       >
         <button>
@@ -205,7 +207,7 @@ const ProviderDropDown = ({ activeProvider, setProvider }) => {
 
       <DropdownMenu.Portal>
         <DropdownMenu.Content
-          className="bg-white p-4 w-[240px] rounded shadow-md"
+          className="bg-white p-4 w-[240px] rounded shadow-lg"
           sideOffset={5}
         >
           <DropdownMenu.RadioGroup
