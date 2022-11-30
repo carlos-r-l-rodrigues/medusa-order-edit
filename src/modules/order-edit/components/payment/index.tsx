@@ -64,7 +64,7 @@ const Payment = ({ index }: PaymentProps) => {
       {orderEdit.difference_due > 0 && (
         <>
           <h2 className="mt-6 mb-2 text-grey-90 text-sm font-semibold">
-            Summary
+            Payment Method
           </h2>
           <PaymentContainer index={index} isLoading={isLoading} />
         </>

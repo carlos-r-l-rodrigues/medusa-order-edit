@@ -10,15 +10,11 @@ type FormValues = {
 }
 
 const DeclineOrderChanges = () => {
-
-  const {
-    orderEdit,
-    setOrderEditStatus,
-    setDeclineOrderEdit,
-  } = useOrderEditContext()
+  const { orderEdit, setOrderEditStatus, setDeclineOrderEdit } =
+    useOrderEditContext()
 
   if (orderEdit.status !== "requested") {
-    return <></>
+    return null
   }
 
   const [submitting, setSubmitting] = useState(false)
@@ -35,11 +31,13 @@ const DeclineOrderChanges = () => {
     setSubmitting(true)
     setError(undefined)
 
-    setDeclineOrderEdit({
-        declined_reason: data.reason
+    setDeclineOrderEdit(
+      {
+        declined_reason: data.reason,
       },
       {
         onSuccess: ({ order_edit }) => {
+          // TODO: `orderEdit` shoould be refreshed in the context
           orderEdit.declined_reason = order_edit.declined_reason
 
           setSubmitting(false)
@@ -48,13 +46,16 @@ const DeclineOrderChanges = () => {
         onError: () => {
           setSubmitting(false)
           setError("Failed to decline the Order Edit, please try again.")
-        }
-    })
+        },
+      }
+    )
   })
 
   return (
     <div>
-      Decline Reason
+      <h2 className="mt-6 mb-2 text-grey-90 text-sm font-semibold">
+        Decline Reason
+      </h2>
       <Input
         label="Reason"
         {...register("reason", {
@@ -64,12 +65,14 @@ const DeclineOrderChanges = () => {
         errors={errors}
         autoComplete=""
       />
-
-      <Button className="min-h-0 round-button" onClick={submit} disabled={submitting}>
+      <Button
+        className="min-h-0 round-button"
+        onClick={submit}
+        disabled={submitting}
+      >
         Decline Changes
         {submitting && <Spinner />}
       </Button>
-
       {error && (
         <div className="text-rose-500 text-small-regular py-2">{error}</div>
       )}
