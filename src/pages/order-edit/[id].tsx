@@ -20,14 +20,17 @@ const fetchOrderEdit = async (id: string): Promise<any> => {
     "items.tax_lines",
     "payment_collection",
     "payment_collection.payment_sessions",
-    "order",
-    "order.region",
-    "order.items",
   ]
 
   return await medusaClient.orderEdits
     .retrieve(id + "?expand=" + expand.join(","))
     .then(async ({ order_edit }) => {
+      order_edit.order = await medusaClient.orders
+      .retrieve(order_edit.order_id)
+      .then(async ({ order }) => {
+        return order
+      })
+
       return order_edit
     })
 }
