@@ -60,7 +60,7 @@ const OrderEditForm = () => {
 
   return (
     <>
-      <div className="w-full bg-white content-container flex justify-center py-8">
+      <div className="w-full bg-white content-container flex justify-center pt-16 pb-8">
         <div className="w-[480px]">
           <h1 className="text-xl-semi text-grey-90">Order edit detals</h1>
           <p className="text-grey-40 text-sm">
@@ -106,39 +106,41 @@ const OrderEditForm = () => {
         </div>
       </div>
 
-      <div className="w-full grid grid-cols-1 gap-y-8">
-        <div>
-          {
-            (orderEditStatus === "confirmed" || orderEditStatus === "declined") &&
-              <OrderEditCompleted />
-          }
+      <div className="w-full bg-gray-100 content-container pt-16 pb-8 mb-2">
+        <div className="flex h-full justify-center ">
+          <div>
+            {
+              (orderEditStatus === "confirmed" || orderEditStatus === "declined") &&
+                <OrderEditCompleted />
+            }
 
-          {
-            orderEdit.payment_collection &&
-            paymentCollectionStatus !== "authorized" &&
-            orderEditStatus === "requested" &&
-            <Payment index={0} />
-          }
+            {
+              orderEdit.payment_collection &&
+              paymentCollectionStatus !== "authorized" &&
+              orderEditStatus === "requested" &&
+              <Payment index={0} />
+            }
 
-          {
-            // If refund or if accepting order edit fails after payment
-            (orderEditStatus === "requested" && (
-              orderEdit.difference_due < 0 ||
-              paymentCollectionStatus === "authorized"
+            {
+              // If refund or if accepting order edit fails after payment
+              (orderEditStatus === "requested" && (
+                orderEdit.difference_due < 0 ||
+                paymentCollectionStatus === "authorized"
+                )
+              ) && (
+                <AcceptOrderChanges text={buttonText} />
               )
-            ) && (
-              <AcceptOrderChanges text={buttonText} />
-            )
-          }
+            }
 
-          {orderEditStatus === "requested" &&
-          paymentCollectionStatus !== "authorized" ? (
-            <DeclineOrderChanges />
-          ) : (
-            ""
-          )}
-          <MedusaCTA />
+            {orderEditStatus === "requested" &&
+            paymentCollectionStatus !== "authorized" ? (
+              <DeclineOrderChanges />
+            ) : (
+              ""
+            )}
+          </div>
         </div>
+        <MedusaCTA />
       </div>
     </>
   )

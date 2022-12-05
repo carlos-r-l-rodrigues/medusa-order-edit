@@ -51,7 +51,7 @@
 
 @layer components {
   .content-container {
-    @apply max-w-[1440px] w-full mx-auto px-8
+    @apply max-w-[1440px] w-full mx-auto px-8;
   }
 
   .contrast-btn {
@@ -109,33 +109,4 @@
   .text-3xl-semi {
     @apply text-[36px] leading-[48px] font-semibold;
   }
-}
-
-
-.pay-methods-box {
-  display: block;
-}
-
-.pay-methods-box .pay-method {
-  box-sizing: border-box;
-  width: 166px;
-  height: 72px;
-  float: left;
-  background: #FFFFFF;
-  border: 2px solid #E5E7EB;
-  border-radius: 8px;
-  margin-right: 5px;
-}
-
-.pay-methods-box .pay-method.method-selected {
-  border: 2px solid #7C3AED;
-}
-
-.payment-box {
-  display: block;
-  clear: both;
-}
-
-.round-button{
-  border-radius: 8px;
 }
