@@ -120,9 +120,15 @@ const PaymentContainer: React.FC<PaymentContainerProps> = ({
   }
 
   return (
-    <div className="flex gap-1">
-      {getPayments()}
+    <div>
+      <div className="flex gap-1">
+        {getPayments()}
 
+        <div className="flex-shrink">
+          <ProviderDropdown activeProvider="stripe" setProvider={setProvider} />
+        </div>
+
+      </div>
       {selectedProvider.paymentProvider && (
         <div className="w-full mt-4">
           {isLoading ? (
@@ -142,10 +148,6 @@ const PaymentContainer: React.FC<PaymentContainerProps> = ({
           )}
         </div>
       )}
-
-      <div className="flex-shrink">
-        <ProviderDropdown activeProvider="stripe" setProvider={setProvider} />
-      </div>
     </div>
   )
 }

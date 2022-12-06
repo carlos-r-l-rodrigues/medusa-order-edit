@@ -5,7 +5,7 @@ import { OrderEdit, Order, PaymentSession } from "@medusajs/medusa"
 import {
   useCompleteOrderEdit,
   useDeclineOrderEdit,
-  useManagePaymentSessions,
+  useManageMultiplePaymentSessions,
 } from "medusa-react"
 
 import React, {
@@ -51,7 +51,7 @@ export const OrderEditProvider = ({
   const {
     mutate: setManagePaymentSessions,
     isLoading: settingPaymentSessions,
-  } = useManagePaymentSessions(paymentCollectionId)
+  } = useManageMultiplePaymentSessions(paymentCollectionId)
 
   const { mutate: setDeclineOrderEdit, isLoading: settingDecliningOrderEdit } =
     useDeclineOrderEdit(orderEdit?.id)
@@ -118,12 +118,11 @@ export const OrderEditProvider = ({
 
     setManagePaymentSessions(
       {
-        sessions: {
+        sessions: [{
           provider_id: providerId,
-          customer_id: "customer-1",
           amount: orderEdit.payment_collection.amount,
           session_id: paymentSession?.id,
-        },
+        }],
       },
       {
         onSuccess: ({ payment_collection }) => {
@@ -147,15 +146,15 @@ export const OrderEditProvider = ({
     // check all completed sessions
     //authorize
     return await medusaClient.paymentCollections
-      .authorize(paymentCollectionId)
-      .then(({ payment_collection }) => {
+      .authorizePaymentSession(paymentCollectionId, paymentSession.id)
+      .then(({ payment_session }) => {
         setCompleteOrderEdit(orderEdit.id, {
           onSuccess: ({ order_edit }) => {
             setOrderEditStatus(order_edit.status)
-            setPaymentCollectionStatus(payment_collection.status)
+            setPaymentCollectionStatus(payment_session.status)
           },
           onError: () => {
-            setPaymentCollectionStatus(payment_collection.status)
+            setPaymentCollectionStatus(payment_session.status)
           },
         })
       })

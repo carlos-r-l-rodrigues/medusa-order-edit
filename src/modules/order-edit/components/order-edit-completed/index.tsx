@@ -22,7 +22,7 @@ const OrderEditCompleted = () => {
               includeTaxes: false,
             })
           }</strong>
-
+          <br />
           <span>The payment will appear on your statement as "Branded Store order edit”.</span>
         </div>
       }
