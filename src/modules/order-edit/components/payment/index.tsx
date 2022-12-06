@@ -3,11 +3,8 @@ import { formatAmount } from "medusa-react"
 
 import PaymentContainer from "../payment-container"
 
-interface PaymentProps {
-  index: number
-}
 
-const Payment = ({ index }: PaymentProps) => {
+const Payment = () => {
   const { order, orderEdit, isLoading } = useOrderEditContext()
 
   const region = order.region
@@ -19,6 +16,15 @@ const Payment = ({ index }: PaymentProps) => {
           <h1 className="text-xl-semi text-grey-90">Payment</h1>
           <p className="text-grey-40 text-sm">
             Complete the order edit by providing your payment details
+          </p>
+        </div>
+      )}
+
+      {orderEdit.difference_due < 0 && (
+        <div>
+          <h1 className="text-xl-semi text-grey-90">Refund</h1>
+          <p className="text-grey-40 text-sm">
+            Confirm the order edit to get refunded
           </p>
         </div>
       )}
@@ -66,7 +72,7 @@ const Payment = ({ index }: PaymentProps) => {
           <h2 className="mt-6 mb-2 text-grey-90 text-sm font-semibold">
             Payment Method
           </h2>
-          <PaymentContainer index={index} isLoading={isLoading} />
+          <PaymentContainer index={0} isLoading={isLoading} />
         </>
       )}
     </div>

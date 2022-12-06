@@ -115,10 +115,8 @@ const OrderEditForm = () => {
             }
 
             {
-              orderEdit.payment_collection &&
-              paymentCollectionStatus !== "authorized" &&
               orderEditStatus === "requested" &&
-              <Payment index={0} />
+              <Payment />
             }
 
             {
