@@ -31,11 +31,11 @@ const PaymentInfoMap: Record<string, { title: string; icon?: JSX.Element }> = {
     icon: <CreditCardIcon />,
   },
   manual: {
-    title: "Test payment",
+    title: "Cash",
     icon: <CreditCardIcon />,
   },
   "test-pay": {
-    title: "Test payment",
+    title: "Cash",
     icon: <CreditCardIcon />,
   },
 }
@@ -124,10 +124,6 @@ const PaymentContainer: React.FC<PaymentContainerProps> = ({
       <div className="flex gap-1">
         {getPayments()}
 
-        <div className="flex-shrink">
-          <ProviderDropdown activeProvider="stripe" setProvider={setProvider} />
-        </div>
-
       </div>
       {selectedProvider.paymentProvider && (
         <div className="w-full mt-4">
@@ -135,8 +131,10 @@ const PaymentContainer: React.FC<PaymentContainerProps> = ({
             <Spinner />
           ) : (
             <>
+              <p className="text-sm">
               {PaymentInfoMap[selectedProvider.paymentProvider.id].title}{" "}
               selected for payment
+              </p>
               <PaymentElement
                 paymentProvider={selectedProvider.paymentProvider}
                 paymentSession={getSession(

@@ -1,4 +1,6 @@
-import React from "react"
+import React, {
+  useState,
+} from "react"
 
 import { formatAmount } from "medusa-react"
 
@@ -12,12 +14,15 @@ import Items from "@modules/order-edit/components/items"
 import MedusaCTA from "@modules/layout/components/medusa-cta"
 import ItemsSummary from "@modules/order-edit/components/items-summary"
 
-const SectionDivider = () => {
+const SectionDivider = ( { isSummary, setIsSummary} ) => {
+
   return (
     <div className="relative h-[20px] flex justify-center items-center my-5">
       <div className="border-b absolute top-[11px] w-[100%]" />
       <div className="text-grey-40 font-xl p-4 bg-white w-[32px] h-[32px] z-50 flex justify-center items-center">
-        +
+        <button onClick={() => setIsSummary(!isSummary)}>
+          {isSummary ? "+" : "-"}
+        </button>
       </div>
     </div>
   )
@@ -26,6 +31,8 @@ const SectionDivider = () => {
 const OrderEditForm = () => {
   const { orderEdit, order, paymentCollectionStatus, orderEditStatus } =
     useOrderEditContext()
+
+  const [ isSummary, setIsSummary ] = useState(false)
 
   if (!orderEdit?.id) {
     return null
@@ -69,14 +76,20 @@ const OrderEditForm = () => {
           <h2 className="mt-6 mb-2 text-grey-90 text-sm font-semibold">
             Original Order
           </h2>
-          <ItemsSummary
-            // TODO: check subtotal if draft order
-            subtotal={order.subtotal}
-            items={order?.items ?? []}
-            region={order.region}
-          />
 
-          <SectionDivider />
+          {!isSummary && <Items items={order?.items ?? []} region={order.region} /> }
+
+          {
+            isSummary &&
+            <ItemsSummary
+              // TODO: check subtotal if draft order
+              subtotal={order.subtotal}
+              items={order?.items ?? []}
+              region={order.region}
+            />
+          }
+
+          <SectionDivider isSummary={isSummary} setIsSummary={setIsSummary} />
 
           <h2 className="text-grey-90 text-sm font-semibold mb-2">
             Order edit
