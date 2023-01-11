@@ -82,7 +82,6 @@ const PaymentContainer: React.FC<PaymentContainerProps> = ({
 
   const onProviderSelect = (index: number, provider: PaymentProvider) => {
     const key = index + "_" + provider.id
-    console.log(key, provider)
     setSession(index, key, provider)
   }
 
@@ -240,7 +239,6 @@ const ProviderDropdown = ({
               const selectedProvider = dropdownProviders.find(
                 (dropdownProvider) => dropdownProvider.id === provider
               )
-              console.log({ selectedProvider })
               if (selectedProvider) setProvider(index, selectedProvider)
             }}
           >
