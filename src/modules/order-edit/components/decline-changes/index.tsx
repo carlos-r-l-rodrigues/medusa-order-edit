@@ -53,7 +53,7 @@ const DeclineOrderChanges = () => {
 
   return (
     <div>
-      <h2 className="mt-6 mb-2 text-grey-90 text-sm font-semibold">
+      <h2 className="mt-6 mb-2 text-sm font-semibold text-grey-90">
         Decline Reason
       </h2>
       <Input
@@ -66,7 +66,7 @@ const DeclineOrderChanges = () => {
         autoComplete=""
       />
       <Button
-        className="min-h-0 round-button"
+        className="min-h-0 mt-2 round-button"
         onClick={submit}
         disabled={submitting}
       >
@@ -74,7 +74,7 @@ const DeclineOrderChanges = () => {
         {submitting && <Spinner />}
       </Button>
       {error && (
-        <div className="text-rose-500 text-small-regular py-2">{error}</div>
+        <div className="py-2 text-rose-500 text-small-regular">{error}</div>
       )}
     </div>
   )

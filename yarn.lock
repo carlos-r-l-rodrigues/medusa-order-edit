@@ -492,18 +492,17 @@
     winston "^3.3.3"
     yargs "^15.3.1"
 
-"@medusajs/medusa-js@^1.3.3":
-  version "1.3.3"
-  resolved "https://registry.yarnpkg.com/@medusajs/medusa-js/-/medusa-js-1.3.3.tgz#53f8f1728dae744a71f4e56050288f447a62e915"
-  integrity sha512-dWxIUMe+sPrcisKkUSjKTh/OnHeMCVx3uONqjj7DYYK2Tp99uaqf8pQsN4vORmpw9DVsJX5+7rh9Cp8CFSdl4w==
+"@medusajs/medusa-js@^1.3.5":
+  version "1.3.5"
+  resolved "https://registry.yarnpkg.com/@medusajs/medusa-js/-/medusa-js-1.3.5.tgz#6a1a1635e106adf6ab5e5169abf7ab8488677eab"
+  integrity sha512-huGBu3lLqaDzACW3JnR1S3PGW+bOxU8ohk5zx+X1wa2PO/41kNGPZ2N1wDCgOyEm5BUVuwE7M67EeTLzJXONnA==
   dependencies:
-    "@medusajs/medusa" "^1.6.2"
     axios "^0.24.0"
     form-data "^4.0.0"
     qs "^6.10.3"
     retry-axios "^2.6.0"
 
-"@medusajs/medusa@^1.6.2", "@medusajs/medusa@^1.6.5":
+"@medusajs/medusa@^1.6.5":
   version "1.6.5"
   resolved "https://registry.yarnpkg.com/@medusajs/medusa/-/medusa-1.6.5.tgz#e6c79b7d53525b5f69326167eebf9e54f514dd4b"
   integrity sha512-jQj6UHZofcsDQPTPP6s2RA48BCjDVvys/fzYI4LATxqdwNaj0cFE4ugJIfxxzgxB0uC0u7+xxfSF95nvm1yfMw==
@@ -4640,12 +4639,12 @@ medusa-payment-stripe@^1.1.45:
     medusa-core-utils "^1.1.32"
     stripe "^8.50.0"
 
-medusa-react@^3.0.1:
-  version "3.0.1"
-  resolved "https://registry.yarnpkg.com/medusa-react/-/medusa-react-3.0.1.tgz#218bb834d595e54ed104317f61c21eddb35de82b"
-  integrity sha512-M5Gibxug4LHiN17g5DJ6I7d6MBjEqhDi6aVawzxp58RFxgNjE75M2U/4+XbbIXRrhDU2YXvkDkC4aa9aPoNCXw==
+medusa-react@^4.0.1:
+  version "4.0.1"
+  resolved "https://registry.yarnpkg.com/medusa-react/-/medusa-react-4.0.1.tgz#727b6d8975e645765846cf227cdab1e0352d7558"
+  integrity sha512-sq1Kk3B2zT10IsaD9/b2odRIKfeHosHF4xjQQvH5qkStiH487qKyFHcF+1ffLs2Qzq1wygZUNp73555bZnEJQQ==
   dependencies:
-    "@medusajs/medusa-js" "^1.3.3"
+    "@medusajs/medusa-js" "^1.3.5"
     lodash "^4.17.21"
     lodash-es "^4.17.21"
     react-query "^3.31.0"
