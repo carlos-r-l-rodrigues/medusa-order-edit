@@ -123,12 +123,14 @@ const PaymentContainer: React.FC<PaymentContainerProps> = ({
       })
   }
 
-  const paymentProviderColumns =
-    paymentProviders.length > 2 ? "3fr,3fr,1fr" : "1fr,1fr"
-
   return (
     <div>
-      <div className={`grid gap-2 grid-cols-[${paymentProviderColumns}]`}>
+      <div
+        className={clsx(`grid gap-2`, {
+          "grid-cols-[3fr_3fr_1fr]": paymentProviders.length > 2,
+          "grid-colrs-[1fr_1fr]": paymentProviders.length <= 2,
+        })}
+      >
         {getPayments()}
         {paymentProviders.length > 2 && (
           <ProviderDropdown
