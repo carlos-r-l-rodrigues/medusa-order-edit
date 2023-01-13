@@ -13,26 +13,29 @@ const Items = ({ items, region }: ItemsProps) => {
   }
 
   return (
-    <div className="py-2 gap-y-4 flex flex-col">
+    <div className="flex flex-col py-2 gap-y-4">
       {items.map((item) => {
         return (
-          <div className="flex justify-between gap-x-2" key={item.id}>
-            <div className="flex gap-x-4 flex-auto">
-              <div className="rounded-lg overflow-hidden">
+          <div
+            className="flex items-center justify-between gap-x-2"
+            key={item.id}
+          >
+            <div className="flex items-center flex-auto gap-x-4">
+              <div className="overflow-hidden rounded-lg">
                 <Thumbnail thumbnail={item.thumbnail} size="xxs" />
               </div>
 
               <div>
-                <h3 className="overflow-ellipsis overflow-hidden whitespace-nowrap font-medium text-base text-grey-90">
+                <h3 className="overflow-hidden text-base font-medium overflow-ellipsis whitespace-nowrap text-grey-90">
                   {item.title}
                 </h3>
               </div>
             </div>
 
-            <div className="text-grey-50 text-base-regular flex-none">
+            <div className="flex-none text-grey-50 text-base-regular">
               {item.quantity}x
             </div>
-            <div className="text-grey-90 font-medium flex-none w-32">
+            <div className="flex-none w-32 font-medium text-grey-90">
               <LineItemPrice
                 quantity={item.quantity}
                 region={region}

@@ -1,6 +1,4 @@
-import React, {
-  useState,
-} from "react"
+import React, { useState } from "react"
 
 import { formatAmount } from "medusa-react"
 
@@ -13,9 +11,9 @@ import OrderEditCompleted from "@modules/order-edit/components/order-edit-comple
 import Items from "@modules/order-edit/components/items"
 import MedusaCTA from "@modules/layout/components/medusa-cta"
 import ItemsSummary from "@modules/order-edit/components/items-summary"
+import { LineItem, OrderEdit } from "@medusajs/medusa"
 
-const SectionDivider = ( { isSummary, setIsSummary} ) => {
-
+const SectionDivider = ({ isSummary, setIsSummary }) => {
   return (
     <div className="relative h-[20px] flex justify-center items-center my-5">
       <div className="border-b absolute top-[11px] w-[100%]" />
@@ -32,7 +30,7 @@ const OrderEditForm = () => {
   const { orderEdit, order, paymentCollectionStatus, orderEditStatus } =
     useOrderEditContext()
 
-  const [ isSummary, setIsSummary ] = useState(false)
+  const [isSummary, setIsSummary] = useState(false)
 
   if (!orderEdit?.id) {
     return null
@@ -67,41 +65,42 @@ const OrderEditForm = () => {
 
   return (
     <>
-      <div className="w-full bg-white content-container flex justify-center pt-16 pb-8">
+      <div className="flex justify-center w-full pt-16 pb-8 bg-white content-container">
         <div className="w-[480px]">
-          <h1 className="text-xl-semi text-grey-90">Order edit detals</h1>
-          <p className="text-grey-40 text-sm">
+          <h1 className="text-xl-semi text-grey-90">Order edit details</h1>
+          <p className="text-sm text-grey-40">
             Overview of the changes made in the order edit
           </p>
-          <h2 className="mt-6 mb-2 text-grey-90 text-sm font-semibold">
+          <h2 className="mt-6 mb-2 text-sm font-semibold text-grey-90">
             Original Order
           </h2>
 
-          {!isSummary && <Items items={order?.items ?? []} region={order.region} /> }
+          {!isSummary && (
+            <Items items={order?.items ?? []} region={order.region} />
+          )}
 
-          {
-            isSummary &&
+          {isSummary && (
             <ItemsSummary
               // TODO: check subtotal if draft order
               subtotal={order.subtotal}
               items={order?.items ?? []}
               region={order.region}
             />
-          }
+          )}
 
           <SectionDivider isSummary={isSummary} setIsSummary={setIsSummary} />
 
-          <h2 className="text-grey-90 text-sm font-semibold mb-2">
+          <h2 className="mb-2 text-sm font-semibold text-grey-90">
             Order edit
           </h2>
           {addedProducts.length ? (
-            <h4 className="text-small font-semibold text-grey-50">Added</h4>
+            <h4 className="font-semibold text-small text-grey-50">Added</h4>
           ) : (
             ""
           )}
           <Items items={addedProducts} region={order.region} />
           {updatedProducts.length ? (
-            <h4 className="text-small font-semibold text-grey-50 mt-6">
+            <h4 className="mt-6 font-semibold text-small text-grey-50">
               Updated
             </h4>
           ) : (
@@ -109,7 +108,7 @@ const OrderEditForm = () => {
           )}
           <Items items={updatedProducts} region={order.region} />
           {removedProducts.length ? (
-            <h4 className="text-small font-semibold text-grey-50 mt-6">
+            <h4 className="mt-6 font-semibold text-small text-grey-50">
               Removed
             </h4>
           ) : (
@@ -119,28 +118,21 @@ const OrderEditForm = () => {
         </div>
       </div>
 
-      <div className="w-full bg-gray-100 content-container pt-16 pb-8 mb-2">
-        <div className="flex h-full justify-center ">
+      <div className="w-full pt-16 pb-8 mb-2 bg-gray-50 content-container">
+        <div className="flex justify-center h-full ">
           <div>
-            {
-              (orderEditStatus === "confirmed" || orderEditStatus === "declined") &&
-                <OrderEditCompleted />
-            }
+            {(orderEditStatus === "confirmed" ||
+              orderEditStatus === "declined") && <OrderEditCompleted />}
 
-            {
-              orderEditStatus === "requested" &&
-              <Payment />
-            }
+            {orderEditStatus === "requested" && <Payment />}
 
             {
               // If refund or if accepting order edit fails after payment
-              (orderEditStatus === "requested" && (
-                orderEdit.difference_due < 0 ||
-                paymentCollectionStatus === "authorized"
+              orderEditStatus === "requested" &&
+                (orderEdit.difference_due < 0 ||
+                  paymentCollectionStatus === "authorized") && (
+                  <AcceptOrderChanges text={buttonText} />
                 )
-              ) && (
-                <AcceptOrderChanges text={buttonText} />
-              )
             }
 
             {orderEditStatus === "requested" &&

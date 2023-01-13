@@ -37,13 +37,13 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
 
     return (
       <div>
-        <div className="relative z-0 w-full text-base-regular">
+        <div className="relative z-0 w-full bg-white text-base-regular rounded-rounded">
           <input
             type={inputType}
             name={name}
             placeholder=" "
             className={clsx(
-              "pt-4 pb-1 block w-full px-4 mt-0 bg-transparent border appearance-none focus:outline-none focus:ring-0 focus:border-gray-400 border-gray-200",
+              "pt-4 pb-1 block w-full px-4 mt-0 bg-transparent border rounded-rounded appearance-none focus:outline-none focus:ring-0 focus:border-gray-400 border-gray-200",
               {
                 "border-rose-500 focus:border-rose-500": hasError,
               }
@@ -68,7 +68,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
             <button
               type="button"
               onClick={() => setShowPassword(!showPassword)}
-              className="text-gray-400 px-4 focus:outline-none transition-all duration-150 outline-none focus:text-gray-700 absolute right-0 top-3"
+              className="absolute right-0 px-4 text-gray-400 transition-all duration-150 outline-none focus:outline-none focus:text-gray-700 top-3"
             >
               {showPassword ? <Eye /> : <EyeOff />}
             </button>

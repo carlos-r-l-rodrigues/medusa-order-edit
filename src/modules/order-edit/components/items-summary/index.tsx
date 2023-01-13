@@ -30,10 +30,10 @@ const ItemsSummary = ({ items, region, subtotal }: ItemsSummaryProps) => {
   }
 
   return (
-    <div className="py-2 gap-y-4 flex flex-col">
+    <div className="flex flex-col py-2 gap-y-4">
       <div className="flex justify-between gap-x-2">
-        <div className="flex items-center gap-x-4 flex-auto">
-          <div className="rounded overflow-hidden relative">
+        <div className="flex items-center flex-auto gap-x-4">
+          <div className="relative overflow-hidden rounded-lg">
             <Thumbnails
               thumbnails={items.map((item) => item.thumbnail)}
               size="xxs"
@@ -48,8 +48,8 @@ const ItemsSummary = ({ items, region, subtotal }: ItemsSummaryProps) => {
           </h3>
         </div>
 
-        <div className="flex items-center justify-end text-grey-90 font-medium flex-none w-32">
-          <span className="text-base-regular text-gray-700 text-right">
+        <div className="flex items-center justify-end flex-none w-32 font-medium text-grey-90">
+          <span className="text-right text-gray-700 text-base-regular">
             {formatAmount({
               amount: subtotal,
               region: region,

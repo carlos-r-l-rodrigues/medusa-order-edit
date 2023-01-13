@@ -8,7 +8,6 @@ import { useOrderEditContext } from "@lib/context/order-edit-context"
 import React, { useEffect, useState } from "react"
 import { formatAmount } from "medusa-react"
 
-
 type PaymentButtonProps = {
   paymentSession?: PaymentSession | null
 }
@@ -33,7 +32,7 @@ const PaymentButton: React.FC<PaymentButtonProps> = ({ paymentSession }) => {
     setNotReady(false)
   }, [orderEdit])
 
-  if(!paymentSession) {
+  if (!paymentSession) {
     return <></>
   }
 
@@ -41,15 +40,35 @@ const PaymentButton: React.FC<PaymentButtonProps> = ({ paymentSession }) => {
   switch (provider_id) {
     case "stripe":
       return (
-        <StripePaymentButton paymentSession={paymentSession} notReady={notReady} amount={amount} />
+        <StripePaymentButton
+          paymentSession={paymentSession}
+          notReady={notReady}
+          amount={amount}
+        />
       )
     case "manual":
-      return <ManualTestPaymentButton paymentSession={paymentSession} notReady={notReady} amount={amount} />
+      return (
+        <ManualTestPaymentButton
+          paymentSession={paymentSession}
+          notReady={notReady}
+          amount={amount}
+        />
+      )
     case "test-pay":
-      return <ManualTestPaymentButton paymentSession={paymentSession} notReady={notReady} amount={amount} />
+      return (
+        <ManualTestPaymentButton
+          paymentSession={paymentSession}
+          notReady={notReady}
+          amount={amount}
+        />
+      )
     case "paypal":
       return (
-        <PayPalPaymentButton notReady={notReady} paymentSession={paymentSession} amount={amount} />
+        <PayPalPaymentButton
+          notReady={notReady}
+          paymentSession={paymentSession}
+          amount={amount}
+        />
       )
     default:
       return <Button disabled>Select a payment method</Button>
@@ -131,14 +150,14 @@ const StripePaymentButton = ({
   return (
     <>
       <Button
-        className="round-button"
+        className="round-button rounded-rounded"
         disabled={submitting || disabled || notReady}
         onClick={handlePayment}
       >
         {submitting ? <Spinner /> : `Pay ${amount}`}
       </Button>
       {errorMessage && (
-        <div className="text-red-500 text-small-regular mt-2">
+        <div className="mt-2 text-red-500 text-small-regular">
           {errorMessage}
         </div>
       )}
@@ -193,10 +212,10 @@ const PayPalPaymentButton = ({
       }}
     >
       {errorMessage && (
-        <span className="text-rose-500 mt-4">{errorMessage}</span>
+        <span className="mt-4 text-rose-500">{errorMessage}</span>
       )}
       <PayPalButtons
-        className="round-button"
+        className="round-button rounded-rounded"
         style={{ layout: "horizontal" }}
         createOrder={async () => paymentSession.data.id as string}
         onApprove={handlePayment}
@@ -228,7 +247,11 @@ const ManualTestPaymentButton = ({
   }
 
   return (
-    <Button className="round-button" disabled={submitting || notReady} onClick={handlePayment}>
+    <Button
+      className="round-button rounded-rounded"
+      disabled={submitting || notReady}
+      onClick={handlePayment}
+    >
       {submitting ? <Spinner /> : `Pay ${amount}`}
     </Button>
   )
